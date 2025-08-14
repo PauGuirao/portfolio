@@ -31,7 +31,7 @@ export function HomePageClient() {
               </span>
             </h1>
             <p className="text-lg font-mono font-medium text-muted-foreground sm:text-xl">
-              AI Software <TypingAnimation words={['Engineer', 'Developer', 'Expert']} className="text-foreground" />
+              AI Software <TypingAnimation words={['Engineer', 'Developer', 'Expert (Not really)']} className="text-foreground" />
             </p>
             <p className="mx-auto max-w-[600px] text-sm text-muted-foreground sm:text-base font-mono">
               Full-stack engineer specialized in AI, video processing, and data products.
@@ -47,7 +47,9 @@ export function HomePageClient() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
             <Link
-              href="/contact"
+              href="https://www.linkedin.com/in/pauguirao/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-md border border-input bg-background px-8 py-3 text-sm font-medium font-mono shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
               Get in Touch
@@ -56,8 +58,8 @@ export function HomePageClient() {
           <LocationGreeting className="mt-4" />
         </div>
       </section>
-      {/* Chat Widget */}
-      <ChatWidget />
+      {/* Chat Widget
+      <ChatWidget />*/}
     </div>
   )
 }

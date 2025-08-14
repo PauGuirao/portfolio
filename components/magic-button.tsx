@@ -50,30 +50,6 @@ export function MagicButton({ className = '' }: MagicButtonProps) {
       try {
         // Get user location
         const locationResponse = await fetch('https://get.geojs.io/v1/ip/geo.json')
-        const locationData = await locationResponse.json()
-        
-        const location: LocationData = {
-          latitude: parseFloat(locationData.latitude),
-          longitude: parseFloat(locationData.longitude)
-        }
-        
-        // Get weather forecast
-        const weatherResponse = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`
-        )
-        const weatherData = await weatherResponse.json()
-        
-        const weatherInfo: WeatherData = {
-          temperature: Math.round(weatherData.current.temperature_2m),
-          weatherCode: weatherData.current.weather_code,
-          windSpeed: Math.round(weatherData.current.wind_speed_10m)
-        }
-        
-        setWeather(weatherInfo)
-        
-        // Set background image based on weather
-        const weatherCategory = getWeatherCategory(weatherInfo.weatherCode)
-        setCurrentBackground(weatherBackgrounds[weatherCategory])
         
       } catch (error) {
         console.error('Failed to fetch weather:', error)

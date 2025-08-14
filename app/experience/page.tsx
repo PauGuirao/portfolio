@@ -219,7 +219,7 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      {/* Skills Section */}
+      {/* Skills Section 
       <section className="mb-16">
         <h2 className="mb-8 text-3xl font-bold tracking-tight">Skills & Technologies</h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -249,6 +249,7 @@ export default function ExperiencePage() {
           ))}
         </div>
       </section>
+      */}
     </div>
   )
 }

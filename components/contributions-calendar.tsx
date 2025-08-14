@@ -243,7 +243,7 @@ export default function ContributionsCalendar() {
           
           {/* Legend */}
           <div className="flex items-center justify-between mt-4 text-xs text-muted-foreground">
-            <span>Menos</span>
+            <span>Less</span>
             <div className="flex gap-1">
               {[0, 1, 3, 6, 10].map((count) => (
                 <div
@@ -252,7 +252,7 @@ export default function ContributionsCalendar() {
                 />
               ))}
             </div>
-            <span>Más</span>
+            <span>More</span>
           </div>
         </div>
       </div>

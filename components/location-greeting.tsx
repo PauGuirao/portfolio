@@ -94,16 +94,55 @@ export function LocationGreeting({ className = '' }: LocationGreetingProps) {
         setGreeting(selectedGreeting)
         
         // Get weather forecast from Open-Meteo
-        const weatherResponse = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${locationInfo.latitude}&longitude=${locationInfo.longitude}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`
+        let weatherResponse = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${locationInfo.latitude}&longitude=${locationInfo.longitude}&current=temperature_2m,weather_code,wind_speed_80m&timezone=auto`
         )
-        const weatherData = await weatherResponse.json()
+        let weatherData = await weatherResponse.json()
         
-        setWeather({
-          temperature: Math.round(weatherData.current.temperature_2m),
-          weatherCode: weatherData.current.weather_code,
-          windSpeed: Math.round(weatherData.current.wind_speed_10m)
-        })
+        // Check if weather data has the expected structure
+        if (weatherData && weatherData.current && 
+            typeof weatherData.current.temperature_2m !== 'undefined' &&
+            typeof weatherData.current.weather_code !== 'undefined') {
+          
+          let windSpeed = weatherData.current.wind_speed_80m;
+          
+          // If wind_speed_10m is not available, try wind_speed_80m with a separate call
+          if (windSpeed === undefined || windSpeed === null) {
+            try {
+              weatherResponse = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${locationInfo.latitude}&longitude=${locationInfo.longitude}&current=temperature_2m,weather_code,wind_speed_80m&timezone=auto`
+              )
+              const fallbackWeatherData = await weatherResponse.json()
+              
+              if (fallbackWeatherData && fallbackWeatherData.current) {
+                windSpeed = fallbackWeatherData.current.wind_speed_80m;
+                // Update weatherData to use the fallback data for consistency
+                weatherData = fallbackWeatherData;
+              }
+            } catch (fallbackError) {
+              console.warn('Failed to fetch wind_speed_80m fallback:', fallbackError)
+            }
+          }
+          
+          if (windSpeed !== undefined && windSpeed !== null) {
+            setWeather({
+              temperature: Math.round(weatherData.current.temperature_2m),
+              weatherCode: weatherData.current.weather_code,
+              windSpeed: Math.round(windSpeed)
+            })
+          } else {
+            console.warn('Neither wind_speed_10m nor wind_speed_80m available')
+            // Still set weather data without wind speed if temperature and weather code are available
+            setWeather({
+              temperature: Math.round(weatherData.current.temperature_2m),
+              weatherCode: weatherData.current.weather_code,
+              windSpeed: 0 // Default to 0 if no wind data available
+            })
+          }
+        } else {
+          console.warn('Weather data structure is invalid or missing required fields:', weatherData)
+          // Don't set weather data if the response is malformed
+        }
         
       } catch (error) {
         console.error('Failed to fetch location or weather:', error)

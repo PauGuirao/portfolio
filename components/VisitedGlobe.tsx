@@ -1,29 +1,27 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import visitedData from '../data/visited-countries.json';
+import type { GlobeMethods, GlobeProps } from 'react-globe.gl';
 
-const Globe = dynamic(() => import('react-globe.gl'), { 
-  ssr: false,
-  loading: () => (
+const Globe = dynamic<GlobeProps & { forwardRef?: React.MutableRefObject<GlobeMethods | undefined> }>(
+  () => import('./GlobeImpl'),
+  { ssr: false, loading: () => (
     <div className="flex items-center justify-center">
-      <div 
-        className="rounded-full flex items-center justify-center animate-pulse"
-        style={{ width: 425, height: 425 }}
-      >
+      <div className="rounded-full flex items-center justify-center animate-pulse" style={{ width: 425, height: 425 }}>
         <div className="text-center text-gray-500 dark:text-gray-400">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse"></div>
+          <div className="w-16 h-16 mx-auto mb-4 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse" />
           <p className="text-sm">Loading globe...</p>
         </div>
       </div>
     </div>
-  )
-});
+  ) }
+);
 
 export default function VisitedGlobe() {
   const [currentPlaceIndex, setCurrentPlaceIndex] = useState(0);
-
+  const globeRef = useRef<GlobeMethods | undefined>(undefined);
   // Array of different colors for each point
   const colors = [
     '#ef4444', // red
@@ -72,6 +70,7 @@ export default function VisitedGlobe() {
     <div className="w-full flex flex-col items-center space-y-4 h-full">
       <div className="flex justify-center items-center flex-shrink-0">
         <Globe
+          forwardRef={globeRef} 
           width={SIZE}
           height={SIZE}
           backgroundColor="rgba(255, 255, 255, 0)"
@@ -93,6 +92,13 @@ export default function VisitedGlobe() {
           arcEndLng="endLng"
           arcColor="color"
           arcStroke={0.7}
+          onGlobeReady={() => {
+            const g = globeRef.current!;
+            const controls = g.controls();
+            controls.autoRotate = true;
+            controls.enableZoom = false;     // you said you don’t want zoom
+            g.pointOfView({ lat: 44.4, lng: -3.7, altitude: 2.1 }, 0);
+          }}
         />
       </div>
       

@@ -1,0 +1,192 @@
+{
+  "visitedCountries": [
+    {
+      "city": "Barcelona",
+      "country": "Spain",
+      "coordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "description": "Home base - vibrant Mediterranean city",
+      "image": "/places/barcelona.jpg"
+    },
+    {
+      "city": "Tokyo",
+      "country": "Japan",
+      "coordinates": {
+        "lat": 35.6762,
+        "lng": 139.6503
+      },
+      "description": "Amazing blend of tradition and technology",
+      "image": "/places/tokyo.jpg"
+    },
+    {
+      "city": "New York",
+      "country": "United States",
+      "coordinates": {
+        "lat": 40.7128,
+        "lng": -74.006
+      },
+      "description": "The city that never sleeps",
+      "image": "/places/new-york.jpg"
+    },
+    {
+      "city": "Paris",
+      "country": "France",
+      "coordinates": {
+        "lat": 48.8566,
+        "lng": 2.3522
+      },
+      "description": "City of lights and romance",
+      "image": "/places/paris.jpg"
+    },
+    {
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "coordinates": {
+        "lat": 52.3676,
+        "lng": 4.9041
+      },
+      "description": "Canals, culture, and cycling capital",
+      "image": "/places/amsterdam.jpg"
+    },
+    {
+      "city": "Bangkok",
+      "country": "Thailand",
+      "coordinates": {
+        "lat": 13.7563,
+        "lng": 100.5018
+      },
+      "description": "Vibrant street life and temple treasures",
+      "image": "/places/bangkok.jpg"
+    },
+    {
+      "city": "London",
+      "country": "U.K",
+      "coordinates": {
+        "lat": 51.5074,
+        "lng": -0.1278
+      },
+      "description": "Historic charm meets modern innovation",
+      "image": "/places/london.jpg"
+    },
+    {
+      "city": "Rome",
+      "country": "Italy",
+      "coordinates": {
+        "lat": 41.9028,
+        "lng": 12.4964
+      },
+      "description": "Eternal city of ancient wonders",
+      "image": "/places/rome.jpg"
+    },
+    {
+      "city": "Taipei",
+      "country": "Taiwan",
+      "coordinates": {
+        "lat": 25.033,
+        "lng": 121.5654
+      },
+      "description": "Tech hub with incredible street food",
+      "image": "/places/taipei.jpg"
+    }
+  ],
+  "flightPaths": [
+    {
+      "from": "Barcelona",
+      "to": "Tokyo",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 35.6762,
+        "lng": 139.6503
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "New York",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 40.7128,
+        "lng": -74.006
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "Paris",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 48.8566,
+        "lng": 2.3522
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "Amsterdam",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 52.3676,
+        "lng": 4.9041
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "Bangkok",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 13.7563,
+        "lng": 100.5018
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "London",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 51.5074,
+        "lng": -0.1278
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "Rome",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 41.9028,
+        "lng": 12.4964
+      }
+    },
+    {
+      "from": "Barcelona",
+      "to": "Taipei",
+      "startCoordinates": {
+        "lat": 41.3851,
+        "lng": 2.1734
+      },
+      "endCoordinates": {
+        "lat": 25.033,
+        "lng": 121.5654
+      }
+    }
+  ]
+}

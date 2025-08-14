@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
+import { AudioGuide } from '@/components/audio-guide'
 import { cn } from '@/lib/utils'
 
 const jetbrainsMono = JetBrains_Mono({ 
@@ -83,6 +84,8 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
+          {/* Audio Guide - Available on all pages */}
+          <AudioGuide />
         </ThemeProvider>
       </body>
     </html>

@@ -21,6 +21,7 @@ export function HomePageClient() {
               fill
               className="object-cover"
               priority
+              unoptimized
             />
           </div>
           <div className="space-y-4">

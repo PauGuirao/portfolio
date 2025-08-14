@@ -43,7 +43,7 @@ export default function ContributionsCalendar() {
       const result: ApiResponse = await response.json();
       
       if (!result.success) {
-        throw new Error(result.error || 'Failed to fetch contributions');
+        throw new Error('Failed to fetch contributions');
       }
       
       setContributionData(result.data);

@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react'
+import { useState } from 'react'
 
 const socialLinks = [
 	{
@@ -9,7 +12,7 @@ const socialLinks = [
 	},
 	{
 		name: 'Twitter',
-		href: 'https://twitter.com/pauguirao',
+		href: 'https://twitter.com/guiicas',
 		icon: Twitter,
 	},
 	{
@@ -17,14 +20,21 @@ const socialLinks = [
 		href: 'https://linkedin.com/in/pauguirao',
 		icon: Linkedin,
 	},
-	{
-		name: 'Email',
-		href: 'mailto:me@yourdomain.com',
-		icon: Mail,
-	},
 ]
 
 export function Footer() {
+	const [emailCopied, setEmailCopied] = useState(false)
+	
+	const handleEmailClick = async () => {
+		try {
+			await navigator.clipboard.writeText('guiraocastells@gmail.com')
+			setEmailCopied(true)
+			setTimeout(() => setEmailCopied(false), 2000)
+		} catch (err) {
+			console.error('Failed to copy email:', err)
+		}
+	}
+
 	return (
 		<footer className="static md:fixed bottom-0 left-0 right-0 z-20 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container flex flex-col items-center justify-between gap-4 py-3 md:h-12 md:flex-row md:py-0">
@@ -49,6 +59,19 @@ export function Footer() {
 							</Link>
 						)
 					})}
+					<button
+						onClick={handleEmailClick}
+						className="text-muted-foreground transition-colors hover:text-foreground relative"
+						title={emailCopied ? 'Email copied!' : 'Copy email'}
+					>
+						<Mail className="h-5 w-5" />
+						<span className="sr-only">Copy email</span>
+						{emailCopied && (
+							<span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded whitespace-nowrap">
+								Copied!
+							</span>
+						)}
+					</button>
 				</div>
 			</div>
 		</footer>

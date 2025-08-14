@@ -1,5 +1,6 @@
 import Image from 'next/image'
-import { MapPin } from 'lucide-react'
+import Link from 'next/link'
+import { MapPin, ExternalLink } from 'lucide-react'
 import { constructMetadata } from '@/lib/seo'
 
 export const metadata = constructMetadata({
@@ -51,6 +52,8 @@ const timeline = [
     year: '2025 - Present',
     title: 'Founder',
     company: 'Bright Shot',
+    companyLink: 'https://bright-shot.com/',
+    companyLogo: '/logos/logo.png', // Add your logo to public/logos/bright-shot.png
     description: 'Leading AI-powered video processing initiatives, reducing processing time by 60% and improving user experience for 100k+ users.',
     location: 'Remote',
     bulletPoints: [
@@ -154,7 +157,39 @@ export default function ExperiencePage() {
                     <span>{item.location}</span>
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold">{item.title} • {item.company}</h3>
+                
+                {/* Company name with optional link and logo */}
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl font-semibold">
+                    {item.title} • 
+                    {item.companyLink ? (
+                      <Link 
+                        href={item.companyLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-primary hover:underline ml-1"
+                      >
+                        {item.company}
+                      </Link>
+                    ) : (
+                      <span className="ml-1">{item.company}</span>
+                    )}
+                  </h3>
+                  
+                  {/* Company logo */}
+                  {item.companyLogo && (
+                    <div className="relative h-6 w-6 ml-2">
+                      <Image
+                        src={item.companyLogo}
+                        alt={`${item.company} logo`}
+                        fill
+                        className="object-contain"
+                        sizes="24px"
+                      />
+                    </div>
+                  )}
+                </div>
+                
                 <p className="text-muted-foreground">{item.description}</p>
                 
                 {/* Bullet Points */}

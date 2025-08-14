@@ -16,7 +16,7 @@ export function HomePageClient() {
         <div className="flex flex-col items-center space-y-6 text-center">
           <div className="relative h-32 w-32 overflow-hidden rounded-full shadow-lg">
             <Image
-              src="/profile.jpeg"
+              src="/profile.webp"
               alt="Pau Guirao"
               fill
               className="object-cover"

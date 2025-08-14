@@ -53,6 +53,7 @@ export function AudioGuide() {
   const [tourStarted, setTourStarted] = useState(false)
   const [autoPlayEnabled, setAutoPlayEnabled] = useState(false)
   const [isNavigatingProgrammatically, setIsNavigatingProgrammatically] = useState(false)
+  const [audioLoaded, setAudioLoaded] = useState(false)
   
   const audioRef = useRef<HTMLAudioElement>(null)
   const router = useRouter()
@@ -72,6 +73,7 @@ export function AudioGuide() {
       setCurrentStepIndex(matchingStepIndex)
       setProgress(0)
       setIsPlaying(false)
+      setAudioLoaded(false)
       
       // Only auto-play if auto-play is enabled
       if (autoPlayEnabled) {
@@ -100,20 +102,27 @@ export function AudioGuide() {
     }
 
     const handleLoadedData = () => {
+      setAudioLoaded(true)
       // Auto-play when new audio loads if tour is active and auto-play is enabled
       if (tourStarted && autoPlayEnabled && !isPlaying) {
         playAudio()
       }
     }
 
+    const handleCanPlayThrough = () => {
+      setAudioLoaded(true)
+    }
+
     audio.addEventListener('timeupdate', updateProgress)
     audio.addEventListener('ended', handleEnded)
     audio.addEventListener('loadeddata', handleLoadedData)
+    audio.addEventListener('canplaythrough', handleCanPlayThrough)
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress)
       audio.removeEventListener('ended', handleEnded)
       audio.removeEventListener('loadeddata', handleLoadedData)
+      audio.removeEventListener('canplaythrough', handleCanPlayThrough)
     }
   }, [currentStepIndex, tourStarted, autoPlayEnabled])
 
@@ -134,24 +143,48 @@ export function AudioGuide() {
     setTourStarted(true)
     setAutoPlayEnabled(false)
     setIsOpen(true)
+    setAudioLoaded(false)
     
     // Find the step that matches the current page or start from beginning
     const matchingStepIndex = tourSteps.findIndex(step => step.route === pathname)
     if (matchingStepIndex !== -1) {
       setCurrentStepIndex(matchingStepIndex)
+      // Wait a bit for the audio element to update with the new source
+      setTimeout(() => {
+        playAudio()
+      }, 100)
+    } else {
+      // Start from beginning if no matching route
+      setCurrentStepIndex(0)
+      setTimeout(() => {
+        playAudio()
+      }, 100)
     }
-    
-    playAudio()
   }
 
   const playAudio = () => {
     const audio = audioRef.current
     if (audio) {
-      audio.play().catch(error => {
-        console.log('Audio play failed:', error)
-        // Handle autoplay restrictions
-      })
-      setIsPlaying(true)
+      // Ensure the audio is loaded before attempting to play
+      const attemptPlay = () => {
+        audio.play().catch(error => {
+          console.log('Audio play failed:', error)
+          // Handle autoplay restrictions
+        })
+        setIsPlaying(true)
+      }
+
+      if (audio.readyState >= 2) { // HAVE_CURRENT_DATA or better
+        attemptPlay()
+      } else {
+        // Wait for audio to load
+        const onCanPlay = () => {
+          attemptPlay()
+          audio.removeEventListener('canplay', onCanPlay)
+        }
+        audio.addEventListener('canplay', onCanPlay)
+        audio.load() // Force reload if needed
+      }
     }
   }
 
@@ -197,6 +230,7 @@ export function AudioGuide() {
       setCurrentStepIndex(nextStepIndex)
       setProgress(0)
       setIsPlaying(false)
+      setAudioLoaded(false)
       
       // Navigate to the next page if not in auto mode
       if (!autoPlayEnabled && tourSteps[nextStepIndex].route) {
@@ -209,6 +243,7 @@ export function AudioGuide() {
       setIsPlaying(false)
       setCurrentStepIndex(0)
       setProgress(0)
+      setAudioLoaded(false)
     }
   }
 
@@ -218,6 +253,7 @@ export function AudioGuide() {
       setCurrentStepIndex(prevStepIndex)
       setProgress(0)
       setIsPlaying(false)
+      setAudioLoaded(false)
       
       // Navigate to the previous page if not in auto mode
       if (!autoPlayEnabled && tourSteps[prevStepIndex].route) {
@@ -233,6 +269,7 @@ export function AudioGuide() {
     setAutoPlayEnabled(false)
     setCurrentStepIndex(0)
     setProgress(0)
+    setAudioLoaded(false)
   }
 
   return (

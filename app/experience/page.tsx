@@ -54,15 +54,17 @@ const timeline = [
     company: 'Bright Shot',
     companyLink: 'https://bright-shot.com/',
     companyLogo: '/logos/logo.png', // Add your logo to public/logos/bright-shot.png
-    description: 'Leading AI-powered video processing initiatives, reducing processing time by 60% and improving user experience for 100k+ users.',
+    description: 'Online software helping 1,000+ professionals worldwide enhance real-estate photos with virtual staging, decluttering, lighting fixes, and style restyles to create market-ready visuals that drive results.',
     location: 'Remote',
     bulletPoints: [
-      'Built AI-powered video processing platform from scratch',
-      'Reduced video processing time by 60% through optimization',
-      'Scaled platform to serve 100k+ active users',
-      'Implemented real-time video analytics and insights'
+      'Built the end-to-end AI image pipeline from scratch (upload → transforms → export).',
+      'Shipped core features: virtual staging, decluttering, lighting enhancement, style restyles, and window-view swaps',
+      'Scaled product for 1,000+ professionals with seamless onboarding, Google sign-in, and Stripe payments',
+      'Led marketing & SEO strategy (site architecture, content, landing pages, analytics) to drive organic growth',
+      'Engineered a Node.js backend and trained/customized the AI model in Python on AWS (GPU inference, CDN delivery)',
+      
     ],
-    technologies: ['React', 'TypeScript', 'Python', 'TensorFlow', 'AWS']
+    technologies: ['React', 'TypeScript', 'Astro', 'Node.js', 'Python', 'AWS','PostgreSQL']
   },
   {
     year: '2024 - Present',

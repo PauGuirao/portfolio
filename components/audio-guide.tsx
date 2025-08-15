@@ -21,7 +21,7 @@ const tourSteps: TourStep[] = [
     description: 'Hello and welcome to my portfolio!',
     audioUrl: '/audio/welcome.mp3',
     route: '/',
-    duration: 15,
+    duration: 40,
     autoNavigate: true
   },
   {
@@ -97,7 +97,10 @@ export function AudioGuide() {
     const handleEnded = () => {
       setIsPlaying(false)
       if (autoPlayEnabled) {
-        nextStep()
+        // Add a small delay to ensure audio has completely finished
+        setTimeout(() => {
+          nextStep()
+        }, 100)
       }
     }
 

@@ -8,9 +8,9 @@ export const metadata = constructMetadata({
 
 export default function TerminalPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       {/* Desktop: normal layout with padding and description */}
-      <div className="hidden sm:block container py-16">
+      <div className="hidden sm:block container py-12 overflow-hidden">
         <div className="space-y-8">
           <div className="text-center space-y-2">
             <p className="text-muted-foreground max-w-3xl mx-auto">

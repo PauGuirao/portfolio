@@ -768,58 +768,58 @@ if (trimmedCmd === 'leaderboard dino') {
             </div>
           ))}
           {/* Dino renderer */}
-{(dino.status === 'run' || dino.lastFrame) && (
-  <div className="mb-4">
-    <div className="flex items-center justify-between mb-1 text-green-400 text-xs sm:text-sm">
-      <span>🦖 Dino Runner</span>
-      {dino.status === 'run' && <span>Score: {dino.score}</span>}
-    </div>
-    <div className="overflow-x-auto">
-      <pre
-        className="select-none leading-3 sm:leading-4 p-2 border border-gray-700 text-green-400 bg-black/40 rounded text-xs sm:text-sm"
-        style={{ whiteSpace: 'pre', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', minWidth: 'fit-content' }}
-      >
-        {dino.status === 'run' ? renderDino(dino) : dino.lastFrame}
-      </pre>
-    </div>
-    <div className="mt-2 flex gap-2 flex-wrap">
-      {dino.status === 'run' ? (
-        <>
-          <button
-            onClick={dinoJump}
-            className="px-3 py-2 border border-green-600 text-green-400 rounded hover:bg-green-600/10 touch-manipulation text-sm"
-          >
-            Jump
-          </button>
-          <button
-            onClick={() => setDino(dinoEmpty())}
-            className="px-3 py-2 border border-red-600 text-red-400 rounded hover:bg-red-600/10 touch-manipulation text-sm"
-          >
-            Quit
-          </button>
-        </>
-      ) : (
-        <button
-          onClick={() =>
-            setDino({
-              status: 'run',
-              startedAt: Date.now(),
-              score: 0,
-              dinoY: 0,
-              velY: 0,
-              obstacles: [],
-              speed: 0.7,
-              lastSpawnAt: 999,
-            })
-          }
-          className="px-3 py-2 border border-green-600 text-green-400 rounded hover:bg-green-600/10 touch-manipulation text-sm"
-        >
-          Play again
-        </button>
-      )}
-    </div>
-  </div>
-)}
+        {(dino.status === 'run' || dino.lastFrame) && (
+        <div className="mb-4">
+            <div className="flex items-center justify-between mb-1 text-green-400 text-xs sm:text-sm">
+            <span>🦖 Dino Runner</span>
+            {dino.status === 'run' && <span>Score: {dino.score}</span>}
+            </div>
+            <div className="overflow-x-auto">
+            <pre
+                className="select-none leading-3 sm:leading-4 p-2 border border-gray-700 text-green-400 bg-black/40 rounded text-xs sm:text-sm"
+                style={{ whiteSpace: 'pre', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', minWidth: 'fit-content' }}
+            >
+                {dino.status === 'run' ? renderDino(dino) : dino.lastFrame}
+            </pre>
+            </div>
+            <div className="mt-2 flex gap-2 flex-wrap">
+            {dino.status === 'run' ? (
+                <>
+                <button
+                    onClick={dinoJump}
+                    className="px-3 py-2 border border-green-600 text-green-400 rounded hover:bg-green-600/10 touch-manipulation text-sm"
+                >
+                    Jump
+                </button>
+                <button
+                    onClick={() => setDino(dinoEmpty())}
+                    className="px-3 py-2 border border-red-600 text-red-400 rounded hover:bg-red-600/10 touch-manipulation text-sm"
+                >
+                    Quit
+                </button>
+                </>
+            ) : (
+                <button
+                onClick={() =>
+                    setDino({
+                    status: 'run',
+                    startedAt: Date.now(),
+                    score: 0,
+                    dinoY: 0,
+                    velY: 0,
+                    obstacles: [],
+                    speed: 0.7,
+                    lastSpawnAt: 999,
+                    })
+                }
+                className="px-3 py-2 border border-green-600 text-green-400 rounded hover:bg-green-600/10 touch-manipulation text-sm"
+                >
+                Play again
+                </button>
+            )}
+            </div>
+        </div>
+        )}
 
           {/* Current input */}
           <form onSubmit={handleSubmit} className="flex items-center">

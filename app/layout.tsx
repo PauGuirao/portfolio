@@ -23,10 +23,19 @@ export const metadata: Metadata = {
   keywords: ['Pau Guirao', 'Full-stack engineer', 'AI', 'Video processing', 'Data products', 'Next.js', 'TypeScript'],
   authors: [{ name: 'Pau Guirao' }],
   creator: 'Pau Guirao',
+  metadataBase: new URL('https://pauguirao.vercel.app'),
+  alternates: {
+    canonical: '/',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://pauguirao.com',
+    url: 'https://pauguirao.vercel.app',
     title: 'Pau Guirao — Portfolio',
     description: 'Full-stack engineer specialized in AI, video processing, and data products.',
     siteName: 'Pau Guirao Portfolio',

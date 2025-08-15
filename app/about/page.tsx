@@ -89,7 +89,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="flex justify-center lg:justify-end">
-            <div className="relative h-full w-full overflow-hidden ml-5">
+            <div className="relative h-full w-full overflow-hidden lg:ml-5">
               <h3 className="text-m font-semibold mb-2 text-center">
                   I've been to <TypingAnimation words={countries} className="text-blue-600 dark:text-blue-400" /> 
               </h3>

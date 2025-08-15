@@ -21,7 +21,9 @@ export function HomePageClient() {
               fill
               className="object-cover"
               priority
-              unoptimized
+              sizes="128px"
+              placeholder="blur"
+              blurDataURL="data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoQABAAAkA4JaQAA3AA/v3VAAoA"
             />
           </div>
           <div className="space-y-4">

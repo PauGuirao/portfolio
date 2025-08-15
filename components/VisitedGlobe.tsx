@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import visitedData from '../data/visited-countries.json';
 import type { GlobeMethods, GlobeProps } from 'react-globe.gl';
@@ -8,14 +8,14 @@ import type { GlobeMethods, GlobeProps } from 'react-globe.gl';
 const Globe = dynamic<GlobeProps & { forwardRef?: React.MutableRefObject<GlobeMethods | undefined> }>(
   () => import('./GlobeImpl'),
   { ssr: false, loading: () => (
-    <div className="flex items-center justify-center">
-      <div className="rounded-full flex items-center justify-center animate-pulse" style={{ width: 425, height: 425 }}>
-        <div className="text-center text-gray-500 dark:text-gray-400">
-          <div className="w-16 h-16 mx-auto mb-4 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse" />
-          <p className="text-sm">Loading globe...</p>
+    <div className="flex items-center justify-center w-full">
+        <div className="rounded-full flex items-center justify-center animate-pulse w-full max-w-[425px] aspect-square">
+          <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gray-300 dark:bg-gray-600 rounded-full animate-pulse" />
+            <p className="text-sm">Loading globe...</p>
+          </div>
         </div>
       </div>
-    </div>
   ) }
 );
 
@@ -53,8 +53,9 @@ export default function VisitedGlobe() {
     color: colors[7] // Use different color for each arc
   }));
 
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [globeSize, setGlobeSize] = useState(320); // sensible default
   // Smaller globe size to make room for the list
-  const SIZE = 425;
 
   const nextPlace = () => {
     setCurrentPlaceIndex((prev) => (prev + 1) % points.length);
@@ -64,15 +65,31 @@ export default function VisitedGlobe() {
     setCurrentPlaceIndex((prev) => (prev - 1 + points.length) % points.length);
   };
 
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const w = el.clientWidth || 320;
+      // clamp between 240 and 425 to avoid being too tiny/too large on mobile
+      setGlobeSize(Math.min(425, Math.max(240, w)));
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const currentPlace = points[currentPlaceIndex];
 
   return (
     <div className="w-full flex flex-col items-center space-y-4 h-full">
-      <div className="flex justify-center items-center flex-shrink-0">
+      <div className="flex justify-center items-center min-w-0 w-full overflow-hidden">
         <Globe
           forwardRef={globeRef} 
-          width={SIZE}
-          height={SIZE}
+          width={globeSize}
+          height={globeSize}
           backgroundColor="rgba(255, 255, 255, 0)"
           showAtmosphere
           atmosphereAltitude={0.22}

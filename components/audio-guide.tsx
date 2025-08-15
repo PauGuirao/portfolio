@@ -289,7 +289,7 @@ export function AudioGuide() {
       {!isOpen && (
         <button
           onClick={startTour}
-          className="fixed bottom-14 left-3 z-40 bg-primary text-primary-foreground p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all duration-200 hover:scale-105"
+          className="fixed bottom-3 sm:bottom-14 left-3 z-40 bg-primary text-primary-foreground p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all duration-200 hover:scale-105"
           aria-label="Start audio tour"
         >
           <Volume2 className="h-4 w-4" />
@@ -298,92 +298,169 @@ export function AudioGuide() {
 
       {/* Audio Guide Widget */}
       {isOpen && (
-        <div className="fixed bottom-14 left-3 z-40 bg-background border border-border rounded-lg shadow-lg p-4 w-[250px] max-w-[calc(100vw-3rem)]">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="font-medium text-sm mb-1">{currentStep.title}</h4>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={toggleAutoPlay}
-                className={`text-xs px-2 py-1 rounded transition-colors ${
-                  autoPlayEnabled 
-                    ? 'bg-primary text-primary-foreground' 
-                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                }`}
-                aria-label="Toggle auto-play"
-              >
-                Auto
-              </button>
-              <button
-                onClick={closeTour}
-                className="text-muted-foreground hover:text-foreground p-1"
-                aria-label="Close tour"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+        <>
+          {/* Mobile: Fixed bottom bar */}
+          <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border p-3 sm:hidden">
+            <div className="flex items-center justify-between">
+              {/* Left side: Title and step info */}
+              <div className="flex-1 min-w-0 mr-3">
+                <h4 className="font-medium text-sm truncate">{currentStep.title}</h4>
+                <p className="text-xs text-muted-foreground">
+                  Step {currentStepIndex + 1} of {tourSteps.length}
+                  {autoPlayEnabled && <span className="ml-2 text-primary">• Auto</span>}
+                </p>
+                {/* Progress Bar */}
+                <div className="w-full bg-muted rounded-full h-1 mt-2">
+                  <div
+                    className="bg-primary h-1 rounded-full transition-all duration-200"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Right side: Controls */}
+              <div className="flex items-center space-x-1">
+                <button
+                  onClick={prevStep}
+                  disabled={currentStepIndex === 0}
+                  className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Previous step"
+                >
+                  <SkipBack className="h-4 w-4" />
+                </button>
+                
+                <button
+                  onClick={togglePlayPause}
+                  className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90"
+                  aria-label={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </button>
+                
+                <button
+                  onClick={nextStep}
+                  disabled={currentStepIndex === tourSteps.length - 1}
+                  className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Next step"
+                >
+                  <SkipForward className="h-4 w-4" />
+                </button>
+
+                <button
+                  onClick={toggleAutoPlay}
+                  className={`p-2 rounded transition-colors ${
+                    autoPlayEnabled 
+                      ? 'bg-primary text-primary-foreground' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  aria-label="Toggle auto-play"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </button>
+                
+                <button
+                  onClick={closeTour}
+                  className="p-2 text-muted-foreground hover:text-foreground"
+                  aria-label="Close tour"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Current Step Info */}
-          <div className="mb-4">
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {currentStep.description}
-            </p>
-            <div className="text-xs text-muted-foreground mt-1">
-              Step {currentStepIndex + 1} of {tourSteps.length}
-              {autoPlayEnabled && <span className="ml-2 text-primary">• Auto-playing</span>}
-            </div>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="w-full bg-muted rounded-full h-1 mb-4">
-            <div
-              className="bg-primary h-1 rounded-full transition-all duration-200"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          {/* Controls */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={prevStep}
-                disabled={currentStepIndex === 0}
-                className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Previous step"
-              >
-                <SkipBack className="h-4 w-4" />
-              </button>
-              
-              <button
-                onClick={togglePlayPause}
-                className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90"
-                aria-label={isPlaying ? "Pause" : "Play"}
-              >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </button>
-              
-              <button
-                onClick={nextStep}
-                disabled={currentStepIndex === tourSteps.length - 1}
-                className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Next step"
-              >
-                <SkipForward className="h-4 w-4" />
-              </button>
+          {/* Desktop: Popup widget */}
+          <div className="hidden sm:block fixed bottom-14 left-3 z-40 bg-background border border-border rounded-lg shadow-lg p-4 w-[280px] sm:w-[300px] max-w-[calc(100vw-1.5rem)]">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-medium text-sm mb-1">{currentStep.title}</h4>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={toggleAutoPlay}
+                  className={`text-xs px-2 py-1 rounded transition-colors ${
+                    autoPlayEnabled 
+                      ? 'bg-primary text-primary-foreground' 
+                      : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  }`}
+                  aria-label="Toggle auto-play"
+                >
+                  Auto
+                </button>
+                <button
+                  onClick={closeTour}
+                  className="text-muted-foreground hover:text-foreground p-1"
+                  aria-label="Close tour"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
-            <button
-              onClick={toggleMute}
-              className="p-2 text-muted-foreground hover:text-foreground"
-              aria-label={isMuted ? "Unmute" : "Mute"}
-            >
-              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-            </button>
+            {/* Current Step Info */}
+            <div className="mb-4">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {currentStep.description}
+              </p>
+              <div className="text-xs text-muted-foreground mt-1">
+                Step {currentStepIndex + 1} of {tourSteps.length}
+                {autoPlayEnabled && <span className="ml-2 text-primary">• Auto-playing</span>}
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-muted rounded-full h-1 mb-4">
+              <div
+                className="bg-primary h-1 rounded-full transition-all duration-200"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={prevStep}
+                  disabled={currentStepIndex === 0}
+                  className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Previous step"
+                >
+                  <SkipBack className="h-4 w-4" />
+                </button>
+                
+                <button
+                  onClick={togglePlayPause}
+                  className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90"
+                  aria-label={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </button>
+                
+                <button
+                  onClick={nextStep}
+                  disabled={currentStepIndex === tourSteps.length - 1}
+                  className="p-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Next step"
+                >
+                  <SkipForward className="h-4 w-4" />
+                </button>
+              </div>
+
+              <button
+                onClick={toggleMute}
+                className="p-2 text-muted-foreground hover:text-foreground"
+                aria-label={isMuted ? "Unmute" : "Mute"}
+              >
+                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   )

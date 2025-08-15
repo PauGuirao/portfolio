@@ -195,7 +195,7 @@ export default function ExperiencePage() {
                 <p className="text-muted-foreground">{item.description}</p>
                 
                 {/* Bullet Points */}
-                <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
+                <ul className="mt-3 space-y-1 text-sm text-foreground">
                   {item.bulletPoints.map((point, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="mt-1.5 h-1 w-1 rounded-full bg-primary flex-shrink-0" />

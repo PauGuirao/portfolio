@@ -739,28 +739,28 @@ if (trimmedCmd === 'leaderboard dino') {
 
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center px-2 sm:px-4 h-full">
       <div 
         ref={terminalRef}
-        className={`w-full max-w-4xl h-[65vh] overflow-y-auto p-6 ${themeStyles.container} rounded-sm shadow-2xl font-mono text-sm transition-all duration-300`}
+        className={`w-full max-w-4xl h-[100vh] sm:h-[65vh] overflow-y-auto p-3 sm:p-6 ${themeStyles.container} sm:rounded-sm shadow-2xl font-mono text-xs sm:text-sm transition-all duration-300`}
         onClick={() => inputRef.current?.focus()}
       >
         <div className="w-full">
           {/* Command history */}
           {history.map((cmd, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} className="mb-1 sm:mb-2">
               {cmd.command && (
-                <div className="flex">
-                  <span className={themeStyles.prompt}>guest@pau-portfolio</span>
-                  <span className={currentTheme === 'light' ? 'text-gray-600' : 'text-white'}>:</span>
-                  <span className={themeStyles.prompt}>~</span>
-                  <span className={currentTheme === 'light' ? 'text-gray-600' : 'text-white'}>$ </span>
-                  <span className={themeStyles.input}>{cmd.command}</span>
+                <div className="flex flex-wrap sm:flex-nowrap">
+                  <span className={`${themeStyles.prompt} shrink-0`}>guest@pau-portfolio</span>
+                  <span className={`${currentTheme === 'light' ? 'text-gray-600' : 'text-white'} shrink-0`}>:</span>
+                  <span className={`${themeStyles.prompt} shrink-0`}>~</span>
+                  <span className={`${currentTheme === 'light' ? 'text-gray-600' : 'text-white'} shrink-0`}>$ </span>
+                  <span className={`${themeStyles.input} break-all sm:break-normal`}>{cmd.command}</span>
                 </div>
               )}
-              <div className={cmd.error ? themeStyles.error : themeStyles.text}>
+              <div className={`${cmd.error ? themeStyles.error : themeStyles.text} overflow-x-auto`}>
                 {cmd.output.map((line, lineIndex) => (
-                  <div key={lineIndex} className="whitespace-pre-wrap">
+                  <div key={lineIndex} className="whitespace-pre-wrap break-words">
                     {line}
                   </div>
                 ))}
@@ -770,28 +770,30 @@ if (trimmedCmd === 'leaderboard dino') {
           {/* Dino renderer */}
 {(dino.status === 'run' || dino.lastFrame) && (
   <div className="mb-4">
-    <div className="flex items-center justify-between mb-1 text-green-400">
+    <div className="flex items-center justify-between mb-1 text-green-400 text-xs sm:text-sm">
       <span>🦖 Dino Runner</span>
       {dino.status === 'run' && <span>Score: {dino.score}</span>}
     </div>
-    <pre
-      className="select-none leading-4 p-2 border border-gray-700 text-green-400 bg-black/40 rounded"
-      style={{ whiteSpace: 'pre', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}
-    >
-      {dino.status === 'run' ? renderDino(dino) : dino.lastFrame}
-    </pre>
-    <div className="mt-2 flex gap-2">
+    <div className="overflow-x-auto">
+      <pre
+        className="select-none leading-3 sm:leading-4 p-2 border border-gray-700 text-green-400 bg-black/40 rounded text-xs sm:text-sm"
+        style={{ whiteSpace: 'pre', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', minWidth: 'fit-content' }}
+      >
+        {dino.status === 'run' ? renderDino(dino) : dino.lastFrame}
+      </pre>
+    </div>
+    <div className="mt-2 flex gap-2 flex-wrap">
       {dino.status === 'run' ? (
         <>
           <button
             onClick={dinoJump}
-            className="px-3 py-1 border border-green-600 text-green-400 rounded hover:bg-green-600/10"
+            className="px-3 py-2 border border-green-600 text-green-400 rounded hover:bg-green-600/10 touch-manipulation text-sm"
           >
             Jump
           </button>
           <button
             onClick={() => setDino(dinoEmpty())}
-            className="px-3 py-1 border border-red-600 text-red-400 rounded hover:bg-red-600/10"
+            className="px-3 py-2 border border-red-600 text-red-400 rounded hover:bg-red-600/10 touch-manipulation text-sm"
           >
             Quit
           </button>
@@ -810,7 +812,7 @@ if (trimmedCmd === 'leaderboard dino') {
               lastSpawnAt: 999,
             })
           }
-          className="px-3 py-1 border border-green-600 text-green-400 rounded hover:bg-green-600/10"
+          className="px-3 py-2 border border-green-600 text-green-400 rounded hover:bg-green-600/10 touch-manipulation text-sm"
         >
           Play again
         </button>
@@ -819,23 +821,25 @@ if (trimmedCmd === 'leaderboard dino') {
   </div>
 )}
 
-
           {/* Current input */}
           <form onSubmit={handleSubmit} className="flex items-center">
-            <span className={themeStyles.prompt}>guest@pau-portfolio</span>
-            <span className={currentTheme === 'light' ? 'text-gray-600' : 'text-white'}>:</span>
-            <span className={themeStyles.prompt}>~</span>
-            <span className={currentTheme === 'light' ? 'text-gray-600' : 'text-white'}>$ </span>
+            <div className="flex shrink-0">
+              <span className={themeStyles.prompt}>guest@pau-portfolio</span>
+              <span className={currentTheme === 'light' ? 'text-gray-600' : 'text-white'}>:</span>
+              <span className={themeStyles.prompt}>~</span>
+              <span className={currentTheme === 'light' ? 'text-gray-600' : 'text-white'}>$ </span>
+            </div>
             <input
               ref={inputRef}
               type="text"
               value={currentInput}
               onChange={(e) => setCurrentInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className={`flex-1 bg-transparent outline-none ${themeStyles.input} ml-1`}
+              className={`flex-1 bg-transparent outline-none ${themeStyles.input} ml-1 min-w-0`}
               readOnly={isTyping}
               autoComplete="off"
               spellCheck="false"
+              style={{ fontSize: 'inherit' }}
             />
           </form>
         </div>

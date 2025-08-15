@@ -8,6 +8,68 @@ interface Command {
   error?: boolean
 }
 
+// === Dino Runner ===
+type DinoState = {
+  status: 'idle' | 'run' | 'over';
+  startedAt: number;
+  score: number;          // frames survived
+  dinoY: number;          // height above ground (0..3)
+  velY: number;           // vertical velocity
+  obstacles: number[];    // x positions (float)
+  speed: number;          // columns per tick
+  lastSpawnAt: number;    // frames since last spawn
+  lastFrame?: string;     // keep last rendered frame on game over
+};
+
+const DINO_COLS = 40;
+const DINO_ROWS = 8;
+const DINO_LB = 'lb_dino';
+
+function dinoEmpty(): DinoState {
+  return {
+    status: 'idle',
+    startedAt: 0,
+    score: 0,
+    dinoY: 0,
+    velY: 0,
+    obstacles: [],
+    speed: 0.7,
+    lastSpawnAt: 999,
+  };
+}
+
+function pushDinoScore(s: { name: string; score: number; ms: number }) {
+  const arr = JSON.parse(localStorage.getItem(DINO_LB) || '[]');
+  arr.push({ ...s, date: new Date().toISOString() });
+  // higher score wins, then faster time
+  arr.sort((a: any, b: any) => b.score - a.score || a.ms - b.ms);
+  localStorage.setItem(DINO_LB, JSON.stringify(arr.slice(0, 20)));
+  return arr.slice(0, 10);
+}
+
+function renderDino(state: DinoState) {
+  const grid = Array.from({ length: DINO_ROWS }, () =>
+    Array(DINO_COLS).fill(' ')
+  );
+  // ground
+  grid[DINO_ROWS - 1].fill('_');
+
+  // obstacles (as █) near ground row
+  state.obstacles.forEach((x) => {
+    const xi = Math.floor(x);
+    if (xi >= 0 && xi < DINO_COLS) {
+      grid[DINO_ROWS - 2][xi] = '█';
+    }
+  });
+
+  // dino at fixed X=3, height depends on dinoY
+  const dy = Math.max(0, Math.min(3, Math.floor(state.dinoY)));
+  const dinoRow = DINO_ROWS - 2 - dy;
+  grid[dinoRow][3] = 'D';
+
+  return grid.map((r) => r.join('')).join('\n');
+}
+
 const commands = {
   help: {
     description: 'Show available commands',
@@ -33,6 +95,10 @@ const commands = {
       '  banner     - Display ASCII banner',
       '  matrix     - Start matrix rain animation',
       '  theme      - Change theme (light/dark/matrix)',
+      '  dino       - Play Dino Runner game',
+      '  dino quit  - Quit the game',
+
+
       '',
       'System:',
       '  whoami     - Display current user info',
@@ -320,6 +386,7 @@ export function TerminalComponent() {
   const [currentTheme, setCurrentTheme] = useState<'dark' | 'light' | 'matrix'>('dark')
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
+  const [dino, setDino] = useState<DinoState>(dinoEmpty());
 
   useEffect(() => {
     // Welcome message
@@ -355,6 +422,61 @@ export function TerminalComponent() {
       command: cmd,
       output: []
     }
+    // Start dino
+if (trimmedCmd === 'dino') {
+  const start = {
+    status: 'run' as const,
+    startedAt: Date.now(),
+    score: 0,
+    dinoY: 0,
+    velY: 0,
+    obstacles: [],
+    speed: 0.7,
+    lastSpawnAt: 999,
+  };
+  setDino(start);
+  newCommand.output = [
+    '🦖 Dino Runner — press [Space]/[↑]/[W] to jump. Type "dino quit" to exit.',
+    'Tip: On mobile, tap the Jump button below.'
+  ];
+  setHistory((p) => [...p, newCommand]);
+  return;
+}
+
+// Manual jump command (handy on mobile)
+if (trimmedCmd === 'dino jump') {
+  if (dino.status !== 'run') {
+    newCommand.output = ['No dino game running. Start with "dino".'];
+  } else {
+    dinoJump();
+    newCommand.output = ['Jump!'];
+  }
+  setHistory((p) => [...p, newCommand]);
+  return;
+}
+
+// Quit dino
+if (trimmedCmd === 'dino quit') {
+  if (dino.status === 'idle') {
+    newCommand.output = ['No dino game running.'];
+  } else {
+    setDino(dinoEmpty());
+    newCommand.output = ['Exited Dino Runner.'];
+  }
+  setHistory((p) => [...p, newCommand]);
+  return;
+}
+
+// Show dino leaderboard
+if (trimmedCmd === 'leaderboard dino') {
+  const top = JSON.parse(localStorage.getItem(DINO_LB) || '[]');
+  newCommand.output = top.length
+    ? ['Leaderboard — Dino (local):', ...top.map((s: any, i: number) =>
+        `${String(i+1).padStart(2,' ')}. ${(s.name||'guest').padEnd(12)}  ${s.score} pts  ${(s.ms/1000).toFixed(1)}s`)]
+    : ['No scores yet. Type "dino" to play.'];
+  setHistory((p) => [...p, newCommand]);
+  return;
+}
 
     if (trimmedCmd === '') {
       setHistory(prev => [...prev, newCommand])
@@ -538,6 +660,84 @@ export function TerminalComponent() {
 
   const themeStyles = getThemeStyles()
 
+  // jump helper
+    const dinoJump = () =>
+    setDino((s) => {
+        if (s.status !== 'run') return s;
+        if (s.dinoY > 0.1) return s; // no double jump
+        return { ...s, velY: 2.8 };
+    });
+
+    // key listener for jump
+    useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+        if (dino.status !== 'run') return;
+        if (e.code === 'Space' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') {
+        e.preventDefault();
+        dinoJump();
+        }
+    };
+    window.addEventListener('keydown', onKey, { passive: false });
+    return () => window.removeEventListener('keydown', onKey);
+    }, [dino.status]);
+
+    // game loop (20 FPS)
+    useEffect(() => {
+    if (dino.status !== 'run') return;
+    const TICK = 50; // ms
+    const G = -0.6; // gravity per tick
+    const COLL_X = 3; // dino column
+
+    const id = setInterval(() => {
+        setDino((s) => {
+        // physics
+        let velY = s.velY + G;
+        let dinoY = Math.max(0, s.dinoY + velY);
+        if (dinoY <= 0) { dinoY = 0; velY = 0; }
+
+        // move obstacles left
+        const moved = s.obstacles.map((x) => x - s.speed).filter((x) => x > -1);
+
+        // spawn new obstacle if far enough
+        const canSpawn = s.lastSpawnAt > 18 && (moved.length === 0 || moved[moved.length - 1] < DINO_COLS - 14);
+        const spawned = canSpawn ? [...moved, DINO_COLS + Math.random() * 6] : moved;
+        const lastSpawnAt = canSpawn ? 0 : s.lastSpawnAt + 1;
+
+        // collision: when an obstacle reaches dino column and dino is low
+        const hit = spawned.some((x) => x >= COLL_X && x < COLL_X + 1 && dinoY < 1);
+
+        // speed up slowly
+        const speed = Math.min(1.6, s.speed + 0.0009);
+
+        const next: DinoState = hit
+            ? {
+                ...s,
+                status: 'over',
+                score: s.score,
+                dinoY,
+                velY,
+                obstacles: spawned,
+                lastSpawnAt,
+                speed,
+                lastFrame: renderDino({ ...s, dinoY, velY, obstacles: spawned }),
+            }
+            : {
+                ...s,
+                score: s.score + 1,
+                dinoY,
+                velY,
+                obstacles: spawned,
+                lastSpawnAt,
+                speed,
+            };
+        return next;
+        });
+    }, TICK);
+
+    return () => clearInterval(id);
+    }, [dino.status]);
+
+
   return (
     <div className="flex justify-center">
       <div 
@@ -567,6 +767,58 @@ export function TerminalComponent() {
               </div>
             </div>
           ))}
+          {/* Dino renderer */}
+{(dino.status === 'run' || dino.lastFrame) && (
+  <div className="mb-4">
+    <div className="flex items-center justify-between mb-1 text-green-400">
+      <span>🦖 Dino Runner</span>
+      {dino.status === 'run' && <span>Score: {dino.score}</span>}
+    </div>
+    <pre
+      className="select-none leading-4 p-2 border border-gray-700 text-green-400 bg-black/40 rounded"
+      style={{ whiteSpace: 'pre', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}
+    >
+      {dino.status === 'run' ? renderDino(dino) : dino.lastFrame}
+    </pre>
+    <div className="mt-2 flex gap-2">
+      {dino.status === 'run' ? (
+        <>
+          <button
+            onClick={dinoJump}
+            className="px-3 py-1 border border-green-600 text-green-400 rounded hover:bg-green-600/10"
+          >
+            Jump
+          </button>
+          <button
+            onClick={() => setDino(dinoEmpty())}
+            className="px-3 py-1 border border-red-600 text-red-400 rounded hover:bg-red-600/10"
+          >
+            Quit
+          </button>
+        </>
+      ) : (
+        <button
+          onClick={() =>
+            setDino({
+              status: 'run',
+              startedAt: Date.now(),
+              score: 0,
+              dinoY: 0,
+              velY: 0,
+              obstacles: [],
+              speed: 0.7,
+              lastSpawnAt: 999,
+            })
+          }
+          className="px-3 py-1 border border-green-600 text-green-400 rounded hover:bg-green-600/10"
+        >
+          Play again
+        </button>
+      )}
+    </div>
+  </div>
+)}
+
 
           {/* Current input */}
           <form onSubmit={handleSubmit} className="flex items-center">

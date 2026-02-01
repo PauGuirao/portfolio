@@ -3,12 +3,15 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
 import { TypingAnimation } from '@/components/typing-animation'
 import { LocationGreeting } from '@/components/location-greeting'
-import { ChatWidget } from '@/components/chat-widget'
+import type { Post } from '@/lib/mdx'
 
-export function HomePageClient() {
+interface HomePageClientProps {
+  posts: Post[]
+}
+
+export function HomePageClient({ posts }: HomePageClientProps) {
   const [clickCount, setClickCount] = useState(0)
   const [showDedication, setShowDedication] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -52,7 +55,7 @@ export function HomePageClient() {
           </div>
           <div className="space-y-4">
             <div className="relative inline-block">
-              <h1 className="text-4xl font-mono font-bold tracking-tight sm:text-5xl md:text-6xl">
+              <h1 className="text-3xl font-mono font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Hi, I'm{' '}
                 <span 
                   className="text-foreground cursor-pointer transition-colors hover:text-primary select-none relative"
@@ -107,32 +110,73 @@ export function HomePageClient() {
               )}
             </div>
             <p className="text-lg font-mono font-medium text-muted-foreground sm:text-xl">
-              AI Software <TypingAnimation words={['Engineer', 'Developer', 'Expert (Not really)']} className="text-foreground" />
+              AI Software <TypingAnimation words={['Engineer', 'Developer', 'Founder', 'Expert (Not really)']} className="text-foreground" />
             </p>
-            <p className="mx-auto max-w-[600px] text-sm text-muted-foreground sm:text-base font-mono">
+            <p className="mx-auto max-w-[600px] text-xs text-muted-foreground sm:text-sm font-mono">
               Full-stack engineer specialized in AI, video processing, and data products.
               I build scalable solutions that solve real-world problems.
             </p>
           </div>
-          <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex items-center gap-5 text-sm font-mono text-muted-foreground">
             <Link
-              href="/projects"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium font-mono text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              View Projects
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/pauguirao/"
+              href="https://bright-shot.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-md border border-input bg-background px-8 py-3 text-sm font-medium font-mono shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="flex items-center gap-1.5 hover:text-foreground transition-colors"
             >
-              Get in Touch
+              <Image src="https://bright-shot.com/favicon.ico" alt="" width={14} height={14} className="rounded-sm" />
+              BrightShot
+            </Link>
+            <span>·</span>
+            <Link
+              href="https://transcriu.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+            >
+              <Image src="https://transcriu.com/favicon.ico" alt="" width={14} height={14} className="rounded-sm" />
+              Transcriu
+            </Link>
+            <span>·</span>
+            <Link
+              href="https://getlate.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+            >
+              <Image src="https://getlate.dev/favicon.ico" alt="" width={14} height={14} className="rounded-sm" />
+              Late
             </Link>
           </div>
           <LocationGreeting className="mt-4" />
         </div>
+
+        {/* Blog sidebar - right side, desktop only */}
+        {posts.length > 0 && (
+          <div className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2">
+            <div className="space-y-3">
+              <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Recent posts</h3>
+              <ul className="space-y-2">
+                {posts.map((post) => (
+                  <li key={post.slug}>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="text-sm font-mono text-muted-foreground hover:text-foreground transition-colors block max-w-[200px] truncate"
+                    >
+                      {post.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/blog"
+                className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors"
+              >
+                View all →
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Dedication Section - Hidden by default */}

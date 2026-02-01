@@ -45,6 +45,8 @@ const tourSteps: TourStep[] = [
 ]
 
 export function AudioGuide() {
+  const pathname = usePathname()
+
   const [isOpen, setIsOpen] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
@@ -54,10 +56,14 @@ export function AudioGuide() {
   const [autoPlayEnabled, setAutoPlayEnabled] = useState(false)
   const [isNavigatingProgrammatically, setIsNavigatingProgrammatically] = useState(false)
   const [audioLoaded, setAudioLoaded] = useState(false)
-  
+
   const audioRef = useRef<HTMLAudioElement>(null)
   const router = useRouter()
-  const pathname = usePathname()
+
+  // Hide audio guide on terminal page
+  if (pathname === '/terminal') {
+    return null
+  }
   
   const currentStep = tourSteps[currentStepIndex]
 

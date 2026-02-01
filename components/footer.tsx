@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Github, Twitter, Linkedin, Mail, BarChart } from 'lucide-react'
+import { Github, Twitter, Linkedin, Mail } from 'lucide-react'
 import { useState } from 'react'
 
 const socialLinks = [
@@ -43,18 +43,14 @@ export function Footer() {
 						Made by Pau
 					</p>
 				</div>
-				
-				{/* Stats link in the middle */}
-				<div className="flex items-center">
-					<Link
-						href="/stats"
-						className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-					>
-						<BarChart className="h-4 w-4" />
-						<span className="text-sm">Stats</span>
-					</Link>
-				</div>
-				
+
+				<Link
+					href="/blog"
+					className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+				>
+					cool blog
+				</Link>
+
 				<div className="flex items-center space-x-4">
 					{socialLinks.map((link) => {
 						const Icon = link.icon

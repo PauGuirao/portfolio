@@ -3,8 +3,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { highlight } from 'sugar-high'
 import remarkGfm from 'remark-gfm'
-import rehypeSlug from 'rehype-slug'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 interface MDXContentProps {
   source: string
@@ -177,25 +175,11 @@ export function MDXContent({ source }: MDXContentProps) {
     <MDXRemote
       source={source}
       components={components}
-      options={
-        {
-          mdxOptions: {
-            remarkPlugins: [remarkGfm],
-            rehypePlugins: [
-              rehypeSlug,
-              [
-                rehypeAutolinkHeadings,
-                {
-                  behavior: 'wrap',
-                  properties: {
-                    className: ['anchor'],
-                  },
-                },
-              ],
-            ],
-          },
-        }
-      }
+      options={{
+        mdxOptions: {
+          remarkPlugins: [remarkGfm],
+        },
+      }}
     />
   )
 }

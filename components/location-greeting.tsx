@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MagicButton } from './magic-button'
 
 interface LocationGreetingProps {
   className?: string
@@ -161,9 +160,8 @@ export function LocationGreeting({ className = '' }: LocationGreetingProps) {
         <p className="text-sm font-mono text-muted-foreground animate-pulse">
           Detecting your location...
         </p>
-        {/* Placeholder for weather data to prevent layout shift */}
         <p className="text-xs font-mono text-muted-foreground/40 animate-pulse">
-          🌡️ --°C • 💨 -- km/h • <span className="opacity-50">Do Magic</span>
+          🌡️ --°C • 💨 -- km/h
         </p>
       </div>
     )
@@ -180,7 +178,7 @@ export function LocationGreeting({ className = '' }: LocationGreetingProps) {
       </p>
       {weather && (
         <p className="text-xs font-mono text-muted-foreground/80">
-          {weatherIcon} {weather.temperature}°C • 💨 {weather.windSpeed} km/h • <MagicButton />
+          {weatherIcon} {weather.temperature}°C • 💨 {weather.windSpeed} km/h
         </p>
       )}
     </div>

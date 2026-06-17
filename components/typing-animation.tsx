@@ -49,7 +49,7 @@ export function TypingAnimation({ words, className = '' }: TypingAnimationProps)
   return (
     <span className={className}>
       {currentText}
-      <span className="animate-pulse">|</span>
+      <span className="animate-pulse [margin-left:-0.05em]">|</span>
     </span>
   )
 }

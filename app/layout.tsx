@@ -5,8 +5,8 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Footer } from '@/components/footer'
 import { cn } from '@/lib/utils'
 
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ['latin'], 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
   variable: '--font-mono',
   weight: ['400', '500', '600', '700'],
   display: 'swap',
@@ -86,8 +86,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen flex-col">
-            <main className="flex-1">{children}</main>
+          <div className="relative min-h-screen">
+            <main>{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

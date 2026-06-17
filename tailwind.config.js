@@ -50,13 +50,15 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          "var(--font-mono)",
-          "ui-monospace",
-          "SFMono-Regular",
-          "Consolas",
-          "Liberation Mono",
-          "Menlo",
-          "monospace",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
         ],
         mono: [
           "var(--font-mono)",

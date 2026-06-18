@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { TypingAnimation } from '@/components/typing-animation'
+import { MeDinoSection } from '@/components/me-dino-section'
 
 export function HomePageClient() {
   const [clickCount, setClickCount] = useState(0)
@@ -130,12 +131,7 @@ export function HomePageClient() {
             </p>
           </div>
           </div>
-          <div className="flex flex-col items-start gap-4 self-start">
-            <h3 className="text-base font-sans font-semibold text-foreground">Me</h3>
-            <p className="text-sm font-sans text-muted-foreground">
-              I love building cool products
-            </p>
-          </div>
+          <MeDinoSection />
           <div className="flex flex-col items-start gap-4 self-start">
             <h3 className="text-base font-sans font-semibold text-foreground">Working</h3>
             <div className="flex flex-col gap-2 text-sm font-sans text-muted-foreground">

@@ -7,46 +7,68 @@ import { TypingAnimation } from '@/components/typing-animation'
 
 export function HomePageClient() {
   const [clickCount, setClickCount] = useState(0)
-  const [showDedication, setShowDedication] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
 
   const handleNameClick = () => {
-    const newCount = clickCount + 1
-    setClickCount(newCount)
-    
+    setClickCount(clickCount + 1)
+
     // Show confetti animation
     setShowConfetti(true)
     setTimeout(() => setShowConfetti(false), 1000)
-    
-    if (newCount === 5) {
-      setTimeout(() => {
-        setShowDedication(true)
-      }, 500)
-    }
   }
 
   return (
     <div className="flex flex-col">
       {/* Main Hero Section - Full screen */}
-      <section 
-        id="main-section" 
-        className={`flex flex-col items-center justify-start space-y-8 px-4 pt-24 sm:pt-32 pb-16 relative transition-opacity duration-1000 ${
-          showDedication ? 'opacity-0' : 'opacity-100'
-        }`}
+      <section
+        id="main-section"
+        className="flex flex-col items-center justify-start space-y-8 px-4 pt-24 sm:pt-32 pb-16 relative"
       >
         <div className="flex flex-col items-start space-y-8 w-full max-w-xl text-left">
           <div className="flex flex-row items-center gap-4">
-          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full shadow-lg">
+          <div className="blob relative h-16 w-16 shrink-0 overflow-hidden shadow-lg">
             <Image
               src="/profile.webp"
               alt="Pau Guirao"
               fill
               className="object-cover"
               priority
-              sizes="80px"
+              sizes="64px"
               placeholder="blur"
               blurDataURL="data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoQABAAAkA4JaQAA3AA/v3VAAoA"
             />
+            <style jsx>{`
+              .blob {
+                border-radius: 50%;
+                transition: border-radius 0.4s ease;
+              }
+              .blob:hover {
+                animation: blob-morph 1.2s ease-in-out forwards;
+              }
+              @keyframes blob-morph {
+                0% {
+                  border-radius: 50%;
+                }
+                30% {
+                  border-radius: 62% 38% 46% 54% / 60% 56% 44% 40%;
+                }
+                55% {
+                  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+                }
+                80% {
+                  border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%;
+                }
+                100% {
+                  border-radius: 16%;
+                }
+              }
+              @media (prefers-reduced-motion: reduce) {
+                .blob:hover {
+                  animation: none;
+                  border-radius: 16%;
+                }
+              }
+            `}</style>
           </div>
           <div className="space-y-1">
             <div className="relative inline-block">
@@ -55,7 +77,6 @@ export function HomePageClient() {
                 <span 
                   className="text-foreground cursor-pointer transition-colors hover:text-primary select-none relative"
                   onClick={handleNameClick}
-                  title={clickCount > 0 ? `${5 - clickCount} more clicks...` : ''}
                 >
                   Pau
                   {/* Confetti particles */}
@@ -108,6 +129,12 @@ export function HomePageClient() {
               <TypingAnimation words={['mid software engineer', 'mid padel player']} className="text-muted-foreground" />
             </p>
           </div>
+          </div>
+          <div className="flex flex-col items-start gap-4 self-start">
+            <h3 className="text-base font-sans font-semibold text-foreground">Me</h3>
+            <p className="text-sm font-sans text-muted-foreground">
+              I love building cool products
+            </p>
           </div>
           <div className="flex flex-col items-start gap-4 self-start">
             <h3 className="text-base font-sans font-semibold text-foreground">Working</h3>
@@ -165,45 +192,6 @@ export function HomePageClient() {
 
       </section>
 
-      {/* Dedication Section - Hidden by default */}
-      {showDedication && (
-        <section className="h-screen flex flex-col items-center justify-center space-y-8 px-4 absolute inset-0 bg-background/95 backdrop-blur-sm animate-in fade-in duration-1000">
-          <div className="text-center space-y-8 max-w-3xl">
-            <div className="space-y-4">
-              <div className="space-y-6 text-muted-foreground">
-                <div className="space-y-3">
-                  <h3 className="text-lg font-sans font-semibold text-foreground">
-                    To my mom and dad:
-                  </h3>
-                  <p className="text-sm font-sans leading-relaxed">
-                    Gràcies per creure sempre en mi. El vostre suport incondicional, les vostres paraules d'ànim fins a altes hores de la nit i la vostra fe indestructible han fet possible aquest viatge. M'heu ensenyat que amb esforç i determinació, qualsevol somni és possible, us estimo.
-                  </p>
-                </div>
-                
-                <div className="space-y-3">
-                  <h3 className="text-lg font-sans font-semibold text-foreground">
-                    To my grandpa:
-                  </h3>
-                  <p className="text-sm  font-sans leading-relaxed">
-                    T'extranyo cada dia. Aquest portafoli és la prova que les teves lliçons perduraran per sempre.
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <button
-              onClick={() => {
-                setShowDedication(false)
-                setClickCount(0)
-              }}
-              className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-2 text-sm font-medium font-sans shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              Back to Portfolio
-            </button>
-          </div>
-        </section>
-      )}
-      
       {/* Chat Widget
       <ChatWidget />*/}
     </div>

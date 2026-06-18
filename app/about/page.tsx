@@ -23,7 +23,7 @@ export default function AboutPage() {
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
               About Me
             </h1>
-            
+
             {/* Who I Am Section */}
             <div className="space-y-2">
               <h2 className="text-xl font-semibold text-foreground">Who I Am</h2>

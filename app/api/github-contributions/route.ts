@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 const GITHUB_USERNAME = "PauGuirao"; // Your GitHub username
 
 export async function GET(request: Request) {

@@ -6,7 +6,7 @@ const siteConfig = {
   url: 'https://pauguirao.com',
   ogImage: '/og-image.png',
   creator: 'Pau Guirao',
-  twitterCreator: '@pauguirao',
+  twitterCreator: '@guirao_pau',
 }
 
 export function constructMetadata({

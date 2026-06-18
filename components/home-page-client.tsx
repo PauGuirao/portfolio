@@ -152,7 +152,7 @@ export function HomePageClient() {
                 LinkedIn
               </Link>
               <Link
-                href="https://x.com/pauguirao"
+                href="https://x.com/guirao_pau"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"

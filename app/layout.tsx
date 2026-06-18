@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     title: 'Pau Guirao — Portfolio',
     description: 'Full-stack engineer specialized in AI, video processing, and data products.',
     images: ['/og-image.png'],
-    creator: '@pauguirao',
+    creator: '@guirao_pau',
   },
   robots: {
     index: true,

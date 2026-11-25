@@ -144,15 +144,6 @@ export function HomePageClient() {
                 <Image src="https://zernio.com/favicon.ico" alt="" width={14} height={14} className="rounded-sm" />
                 Zernio
               </Link>
-              <Link
-                href="https://bright-shot.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:text-foreground transition-colors"
-              >
-                <Image src="https://bright-shot.com/favicon.ico" alt="" width={14} height={14} className="rounded-sm" />
-                BrightShot
-              </Link>
             </div>
           </div>
           <div className="flex flex-col items-start gap-4 self-start">

@@ -47,25 +47,19 @@ const skills = [
   },
 ]
 
-const timeline = [
-  {
-    year: '2025 - Present',
-    title: 'Founder',
-    company: 'Bright Shot',
-    companyLink: 'https://bright-shot.com/',
-    companyLogo: '/logos/logo.png', // Add your logo to public/logos/bright-shot.png
-    description: 'Online software helping 1,000+ professionals worldwide enhance real-estate photos with virtual staging, decluttering, lighting fixes, and style restyles to create market-ready visuals that drive results.',
-    location: 'Remote',
-    bulletPoints: [
-      'Built the end-to-end AI image pipeline from scratch (upload → transforms → export).',
-      'Shipped core features: virtual staging, decluttering, lighting enhancement, style restyles, and window-view swaps',
-      'Scaled product for 1,000+ professionals with seamless onboarding, Google sign-in, and Stripe payments',
-      'Led marketing & SEO strategy (site architecture, content, landing pages, analytics) to drive organic growth',
-      'Engineered a Node.js backend and trained/customized the AI model in Python on AWS (GPU inference, CDN delivery)',
-      
-    ],
-    technologies: ['React', 'TypeScript', 'Astro', 'Node.js', 'Python', 'AWS','PostgreSQL']
-  },
+type TimelineEntry = {
+  year: string
+  title: string
+  company: string
+  companyLink?: string
+  companyLogo?: string
+  description: string
+  location: string
+  bulletPoints: string[]
+  technologies: string[]
+}
+
+const timeline: TimelineEntry[] = [
   {
     year: '2024 - Present',
     title: 'Lead Software Engineer',

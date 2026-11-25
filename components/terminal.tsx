@@ -88,7 +88,6 @@ const commands = {
       'Navigation & Actions:',
       '  open       - Navigate to pages (e.g., open /projects)',
       '  cv         - Download CV/resume',
-      '  email      - Copy email to clipboard',
       '  social     - Show social media links',
       '',
       'Visual & Fun:',
@@ -191,21 +190,8 @@ const commands = {
       '🐙 GitHub:    https://github.com/pauguirao',
       '💼 LinkedIn:  https://linkedin.com/in/pauguirao',
       '🌐 Website:   https://pauguirao.vercel.app',
-      '🚀 Bright Shot: https://bright-shot.com',
-      '📧 Email:     guiraocastells@gmail.com',
       '',
-      '💡 Tip: Use "email" command to copy email to clipboard',
       '💡 Tip: Use "open /projects" to view my work'
-    ]
-  },
-  email: {
-    description: 'Copy email to clipboard',
-    output: [
-      '📧 Email copied to clipboard!',
-      '',
-      'guiraocastells@gmail.com',
-      '',
-      'Feel free to reach out for opportunities or collaborations!'
     ]
   },
   cv: {
@@ -282,11 +268,6 @@ const commands = {
     output: [
       'Work Experience:',
       '',
-      '2025 - Present  │ Founder @ Bright Shot',
-      '                │ • Built end-to-end AI image pipeline from scratch',
-      '                │ • Scaled product for 1,000+ professionals worldwide',
-      '                │ • Led marketing & SEO strategy for organic growth',
-      '',
       '2024 - Present  │ Lead Software Engineer @ Capgemini',
       '                │ • Architected scalable data pipeline infrastructure',
       '                │ • Built real-time analytics dashboards',
@@ -302,10 +283,6 @@ const commands = {
     description: 'List recent projects',
     output: [
       'Recent Projects:',
-      '',
-      '🚀 Bright Shot',
-      '   Online software for real-estate photo enhancement',
-      '   Tech: React, TypeScript, Node.js, Python, AWS',
       '',
       '🎯 AI Video Processor',
       '   Advanced video processing with machine learning',
@@ -323,7 +300,6 @@ const commands = {
     output: [
       'Contact Information:',
       '',
-      '📧 Email:    guiraocastells@gmail.com',
       '💼 LinkedIn: linkedin.com/in/pauguirao',
       '🐙 GitHub:   github.com/pauguirao',
       '🌐 Website:  pauguirao.vercel.app',
@@ -489,19 +465,6 @@ if (trimmedCmd === 'leaderboard dino') {
     }
 
     // Handle special commands with side effects
-    if (trimmedCmd === 'email') {
-      // Copy email to clipboard
-      navigator.clipboard.writeText('pau@example.com').then(() => {
-        newCommand.output = commands.email.output
-        setHistory(prev => [...prev, newCommand])
-      }).catch(() => {
-        newCommand.output = ['Failed to copy email to clipboard', 'Email: pau@example.com']
-        newCommand.error = true
-        setHistory(prev => [...prev, newCommand])
-      })
-      return
-    }
-
     if (trimmedCmd === 'cv') {
       // Simulate CV download
       newCommand.output = commands.cv.output
